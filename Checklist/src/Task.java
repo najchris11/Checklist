@@ -26,6 +26,10 @@ public class Task {
 		if (!(task instanceof Task)) return null;
 		else return new Task(task);
 	}
+	@Override
+	public String toString() {
+		return String.format("%-40s %10s %5d", this.getTitle(), this.getDueDate(), this.getImportance());
+	}
 	
 	//===================== Getters/Settters
 	public void setTitle(String title) {
