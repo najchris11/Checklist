@@ -1,5 +1,6 @@
 import java.io.File;
 import java.io.PrintWriter;
+import java.security.InvalidParameterException;
 import java.util.ArrayList;
 import java.util.Scanner;
 
@@ -25,9 +26,11 @@ public class Tester {
 				save();
 				break;
 			case 3:
+				remove();
 				save();
 				break;
 			case 4:
+				clear();
 				save();
 				break;
 			default:
@@ -37,13 +40,43 @@ public class Tester {
 		kb.close();
 	}
 
+	private static void clear() {
+		TaskList.clear();
+		System.out.println("Tasklist is empty.");
+	}
+
+	private static void remove() {
+		int i;
+		System.out.println("Enter the index of the task you'd like to remove");
+		i = Integer.parseInt(kb.nextLine());
+		TaskList.remove(i);
+	}
+
 	private static void add() {
+		String title, dueDate, cont;
+		int importance;
 		System.out.println("Enter task title");
-		System.out.println("Would you like to add a due date and importance level?");
+		title = kb.nextLine();
+		System.out.println("Would you like to add a due date and importance level? (Y/N)");
+		cont = kb.nextLine();
+		if (cont.equalsIgnoreCase("y")) {
+		System.out.println("Enter due date");
+		dueDate = kb.nextLine();
+		System.out.println("Enter importance level (0 - 3)");
+		importance = Integer.parseInt(kb.nextLine());
+		TaskList.add(new Task (title, dueDate, importance));
+		}
+		else if (cont.equalsIgnoreCase("n")) {
+			TaskList.add(new Task(title));
+			System.out.println("Thank you, your task has been added to the list.");
+		}
+		else {
+			throw new InvalidParameterException("Please respond with either y or n.");
+		}
 	}
 
 	private static void read() {
-		System.out.printf("%-40s %10s %-15s", "Title", "Due Date", "Importance");
+		System.out.printf("%-40s %-25s %-10s\n", "Title (String)", "Due Date(String)", "Importance(Int)");
 		for(Task t : TaskList) {
 			System.out.println(t);
 		}
@@ -55,7 +88,7 @@ public class Tester {
 		try {
 			fileIn = new Scanner(new File("list.txt"));
 			while (fileIn.hasNextLine()) {
-				task = kb.nextLine().split("/t");
+				task = fileIn.nextLine().split("\t");
 				TaskList.add(new Task(task[0], task[1], Integer.parseInt(task[2])));
 			}
 		} catch (Exception e) {
@@ -74,7 +107,7 @@ public class Tester {
 		try {
 			fileOut = new PrintWriter(new File("list.txt"));
 			for (Task t : TaskList) {
-				fileOut.println(t.getTitle() + "/t" + t.getDueDate() + "/t" + t.getImportance());
+				fileOut.println(t.getTitle() + "\t" + t.getDueDate() + "\t" + t.getImportance());
 			}
 		} catch (Exception e) {
 			System.out.println("Error: " + e.getMessage());
