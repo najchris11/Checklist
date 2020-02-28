@@ -1,2 +1,3 @@
 # Checklist
-Trying to use Eclipse to make a checklist.
+Trying to use Eclipse and Git to make a visual checklist.
+So far. The skeleton of the list is complete.
