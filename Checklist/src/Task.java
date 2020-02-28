@@ -26,6 +26,10 @@ public class Task {
 		if (!(task instanceof Task)) return null;
 		else return new Task(task);
 	}
+	@Override
+	public String toString() {
+		return String.format("%-40s %-25s %-10d", getTitle(), getDueDate(), getImportance());
+	}
 	
 	//===================== Getters/Settters
 	public void setTitle(String title) {
@@ -41,7 +45,7 @@ public class Task {
 		return this.dueDate;
 	}
 	public void setImportance(int importance) {
-		if (importance <= 0 && importance <= 3)
+		if (importance >= 0 && importance <= 3)
 		this.importance = importance;
 		else throw new InvalidParameterException("Value must be between 0 and 3");
 	}
