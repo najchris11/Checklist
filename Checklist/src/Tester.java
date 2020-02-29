@@ -10,12 +10,9 @@ public class Tester {
 	public static void main(String[] args) {
 		int choice;
 		load();
-		System.out.println("What would you like to do with the list?");
-		System.out.println("1) Display existing list");
-		System.out.println("2) Add to existing list");
-		System.out.println("3) Remove from existing list");
-		System.out.println("4) Clear existing list");
-		System.out.println("0) Exit Checklist");
+		greet();
+		boolean cont = true;
+		while (cont) {
 		choice = Integer.parseInt(kb.nextLine());
 			switch (choice) {
 			case 1:
@@ -34,10 +31,22 @@ public class Tester {
 				save();
 				break;
 			default:
+				cont = false;
 				System.out.println("Be sure to stay on top of things!");
 				break;
 			}
-		kb.close();
+			if (cont) greet();
+		}
+	}
+
+	private static void greet() {
+		System.out.println("What would you like to do with the list?");
+		System.out.println("1) Display existing list");
+		System.out.println("2) Add to existing list");
+		System.out.println("3) Remove from existing list");
+		System.out.println("4) Clear existing list");
+		System.out.println("0) Exit Checklist");
+		
 	}
 
 	private static void clear() {
