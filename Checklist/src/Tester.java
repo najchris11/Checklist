@@ -6,15 +6,14 @@ import java.util.Scanner;
 
 public class Tester {
 	public static ArrayList <Task> TaskList = new ArrayList <Task>();
+	public static int choice;
+	public static Scanner kb = new Scanner(System.in);
 	public static void main(String[] args) {
-		new GUI();
-		int choice;
+//		new GUI();
 		load();
 		greet();
 		boolean cont = true;
 		while (cont) {
-			choice = 1;
-//		choice = Integer.parseInt(kb.nextLine());
 			switch (choice) {
 			case 1:
 				read();
@@ -40,9 +39,10 @@ public class Tester {
 		}
 	}
 
-	static String greet() {
-		return "What would you like to do with the list?\n1) Display existing list\n2) Add to existing list\n"
-				+ "3) Remove from existing list\n4) Clear existing list\n0) Exit Checklist";
+	private static void greet() {
+		System.out.println("What would you like to do with the list?\n1) Display existing list\n2) Add to existing list\n"
+				+ "3) Remove from existing list\n4) Clear existing list\n0) Exit Checklist");
+		choice = Integer.parseInt(kb.nextLine());
 	}
 
 	private static void clear() {
@@ -53,7 +53,7 @@ public class Tester {
 	private static void remove() {
 		int i;
 		System.out.println("Enter the index of the task you'd like to remove");
-//		i = Integer.parseInt(kb.nextLine());
+		i = Integer.parseInt(kb.nextLine());
 		TaskList.remove(i);
 	}
 
@@ -61,14 +61,14 @@ public class Tester {
 		String title, dueDate, cont;
 		int importance;
 		System.out.println("Enter task title");
-//		title = kb.nextLine();
+		title = kb.nextLine();
 		System.out.println("Would you like to add a due date and importance level? (Y/N)");
-//		cont = kb.nextLine();
+		cont = kb.nextLine();
 		if (cont.equalsIgnoreCase("y")) {
 		System.out.println("Enter due date");
-//		dueDate = kb.nextLine();
+		dueDate = kb.nextLine();
 		System.out.println("Enter importance level (0 - 3)");
-//		importance = Integer.parseInt(kb.nextLine());
+		importance = Integer.parseInt(kb.nextLine());
 		TaskList.add(new Task (title, dueDate, importance));
 		}
 		else if (cont.equalsIgnoreCase("n")) {
@@ -102,7 +102,7 @@ public class Tester {
 			try {
 				fileIn.close();
 			} catch (Exception e) {
-//				System.out.println("Error: " + e.getMessage());
+				System.out.println("Error: " + e.getMessage());
 			}
 		}
 	}
