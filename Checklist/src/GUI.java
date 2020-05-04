@@ -35,6 +35,7 @@ public class GUI implements SwingConstants, ActionListener {
 	public static JTextField in = new JTextField();
 	public static ArrayList <Task> TaskList = new ArrayList <Task>();
 	public static JButton returnToMenu = new JButton("Return to Main Menu");
+	public static boolean cont = true;
 	
 	
 	private void start(JPanel panel){
@@ -58,7 +59,6 @@ public class GUI implements SwingConstants, ActionListener {
 	private void ui(JPanel panel) {
 		int choice;
 		choice = Integer.parseInt(in.getText());
-		boolean cont = true;
 		while (cont) {
 			switch (choice) {
 			case 1:
@@ -74,8 +74,8 @@ public class GUI implements SwingConstants, ActionListener {
 //				save();
 //				break;
 			case 4:
-//				clear();
-//				save();
+				clear();
+				save();
 				break;
 			default:
 				cont = false;
@@ -104,6 +104,7 @@ public class GUI implements SwingConstants, ActionListener {
 		returnToMenu.setBounds(225, 780, 100, height);
 		panel.add(returnToMenu);
 		panel.repaint();
+		cont = false;
 	}
 
 	@Override
@@ -121,6 +122,11 @@ public class GUI implements SwingConstants, ActionListener {
 	private String greet() {
 		return "<html>What would you like to do with the list?<br />1) Display existing list<br />2) Add to existing list<br />"
 				+ "3) Remove from existing list<br />4) Clear existing list<br />0) Exit Checklist</html>";
+	}
+	private static void clear() {
+		TaskList.clear();
+		System.out.println("Tasklist is empty.");
+		cont = false;
 	}
 	private static void load() {
 		Scanner fileIn = null;
