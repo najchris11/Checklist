@@ -1,167 +1,100 @@
-
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.io.File;
-import java.io.PrintWriter;
 import java.util.ArrayList;
-import java.util.Scanner;
-import java.util.concurrent.TimeUnit;
+import java.util.HashMap;
 
-import javax.swing.*;
+import javax.swing.JFrame;
+import javax.swing.JList;
+import javax.swing.JMenu;
+import javax.swing.JMenuBar;
+import javax.swing.JMenuItem;
+import javax.swing.JPanel;
 
-public class GUI implements SwingConstants, ActionListener {
-	// Main Method
-	
-	
-	// GUI Setup
-	JPanel panel = new JPanel();
-	JFrame window = new JFrame("Checklist v1.0");
+public class GUI extends JFrame implements ActionListener{
+	// ======================= Parameters
+	static JPanel panel = new JPanel();
+	static JMenuBar menuBar = new JMenuBar();
+//	 ArrayList<ArrayList<Task>> folderList = new ArrayList<ArrayList<Task>>();
+	HashMap<String, ArrayList<Task>> folderList = new HashMap<String, ArrayList<Task>>();
+	static JFrame folderSelect;
+	// ======================= Constructors
 	public GUI() {
-	window.setSize(500,800);
-	window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-	window.setAlwaysOnTop(true);
-	window.add(panel);
-	
-	start(panel);
-	
-	window.setVisible(true);
-	
+		setSize(500, 800);
+		setTitle("Checklist v1.0");
+		setJMenuBar(menuBar);
+		add(panel);
+		setDefaultCloseOperation(EXIT_ON_CLOSE);
+		setAlwaysOnTop(true);
+		setVisible(true);
 	}
+	
+	
+	// ======================= Getters/Setters
+	// ======================= Methods
 	public static void main(String[] args) {
-		load();
+		buildMenuBar();
+		buildPanel();
 		new GUI();
 	}
-	//Global Variables
-	public static JTextField in = new JTextField();
-	public static ArrayList <Task> TaskList = new ArrayList <Task>();
-	public static JButton returnToMenu = new JButton("Return to Main Menu");
-	public static boolean cont = true;
-	
-	
-	private void start(JPanel panel){
-		panel.setLayout(null);
-		JLabel greeting = new JLabel(greet(), LEFT);
-		greeting.setBounds(0, 0, 300, 100);
-		panel.add(greeting);
-		
-		in.setBounds(0, 125, 20, 20);
-		panel.add(in);
-		JButton chooser = new JButton("Click to submit your choice");
-		chooser.setActionCommand("CHOOSE");
-		chooser.setBounds(125, 150, 250, 25);
-		panel.add(chooser);
-		chooser.addActionListener(this);
-		panel.repaint();
-	}
-	
-	
-
-	private void ui(JPanel panel) {
-		int choice;
-		choice = Integer.parseInt(in.getText());
-		while (cont) {
-			switch (choice) {
-			case 1:
-				read(panel);
-				cont = false;
-				break;
-			case 2:
-//				add();
-//				save();
-				break;
-			case 3:
-//				remove();
-//				save();
-//				break;
-			case 4:
-				clear();
-				save();
-				break;
-			default:
-				cont = false;
-				System.out.println("Be sure to stay on top of things!");
-				break;
-			}
-			if (cont) greet();
-		}
+	public static void buildPanel() {
 		
 	}
-
-	private void read(JPanel panel) {
-		JLabel header = new JLabel("Title (String) Due Date(String) Importance(Int)", LEFT);
-		header.setBounds(0, 200, 500, 20);
-		panel.add(header);
-		panel.repaint();
-		int height = 250;
-		for(Task t : TaskList) {
-			JLabel tasks = new JLabel(t.toString());
-			tasks.setBounds(0, height, 500, 25);
-			panel.add(tasks);
-			panel.repaint();
-			height = height + 25;
-		}
-		returnToMenu.setActionCommand("RETURN");
-		returnToMenu.setBounds(225, 780, 100, height);
-		panel.add(returnToMenu);
-		panel.repaint();
-		cont = false;
+	public static void buildMenuBar() {
+		// =================== Objects
+		JMenu file = new JMenu("File");
+		JMenu help = new JMenu("Help");
+		JMenuItem newFolder = new JMenuItem("New");
+		JMenuItem openFolder = new JMenuItem("Open");
+		JMenuItem saveFolder = new JMenuItem("Save");
+		JMenuItem saveAsFolder = new JMenuItem("Save As...");
+		JMenuItem removeFolder = new JMenuItem("Remove");
+		JMenuItem howTo = new JMenuItem("How To...");
+		JMenuItem contactMe = new JMenuItem("Contact Me");
+		file.add(newFolder);
+		file.add(openFolder);
+		file.add(saveFolder);
+		file.add(saveAsFolder);
+		file.add(removeFolder);
+		help.add(howTo);
+		help.add(contactMe);
+		menuBar.add(file);
+		menuBar.add(help);
+		
+		newFolder.setActionCommand("newFolder");
+		openFolder.setActionCommand("openFolder");
+		saveFolder.setActionCommand("saveFolder");
+		saveAsFolder.setActionCommand("saveAsFolder");
+		removeFolder.setActionCommand("removeFolder");
+		howTo.setActionCommand("howTo");
+		contactMe.setActionCommand("contactMe");
 	}
+
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		String cmd = e.getActionCommand();
-		if (cmd.equalsIgnoreCase("choose")) {
-		ui(panel);
-		} else if (cmd.equalsIgnoreCase("return")) {
-			System.out.println("i got the button press");
-			start(panel);
+		switch (cmd) {
+		case "newFolder":
+			newFolderWindow();
+			break;
+		case "openFolder":
+			openFolderWindow();
+			break;
 		}
+		
 	}
-	
-	// Methods from old code
-	private String greet() {
-		return "<html>What would you like to do with the list?<br />1) Display existing list<br />2) Add to existing list<br />"
-				+ "3) Remove from existing list<br />4) Clear existing list<br />0) Exit Checklist</html>";
+
+
+	private void openFolderWindow() {
+		folderSelect = new JFrame("Folder Select:");
+		JPanel p = new JPanel();
+		JList b = new JList(folderList.keySet().toArray());
 	}
-	private static void clear() {
-		TaskList.clear();
-		System.out.println("Tasklist is empty.");
-		cont = false;
-	}
-	private static void load() {
-		Scanner fileIn = null;
-		String[] task = null;
-		try {
-			fileIn = new Scanner(new File("list.txt"));
-			while (fileIn.hasNextLine()) {
-				task = fileIn.nextLine().split("\t");
-				TaskList.add(new Task(task[0], task[1], Integer.parseInt(task[2])));
-			}
-		} catch (Exception e) {
-			System.out.println("New Checklist");
-		} finally {
-			try {
-				fileIn.close();
-			} catch (Exception e) {
-				System.out.println("Error: " + e.getMessage());
-			}
-		}
-	}
-	private static void save() {
-		PrintWriter fileOut = null;
-		try {
-			fileOut = new PrintWriter(new File("list.txt"));
-			for (Task t : TaskList) {
-				fileOut.println(t.getTitle() + "\t" + t.getDueDate() + "\t" + t.getImportance());
-			}
-		} catch (Exception e) {
-			System.out.println("Error: " + e.getMessage());
-		} finally {
-			try {
-				fileOut.close();
-			} catch (Exception e) {
-			}
-		}
+
+
+	private static void newFolderWindow() {
+		
+		
 	}
 	
 }
